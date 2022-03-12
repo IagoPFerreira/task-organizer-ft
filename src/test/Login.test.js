@@ -9,7 +9,7 @@ describe('Testando a página de login', () => {
   const { pathname } = history.location;
 
   const loginEmailInput = findByTestId('login-email-input');
-  const loginPasswordInput = findByTestId('password-email-input');
+  const loginPasswordInput = findByTestId('login-password-input');
   const loginButton = findByTestId('login-submit-button');
   const createAccount = findByTestId('create-account');  
   
