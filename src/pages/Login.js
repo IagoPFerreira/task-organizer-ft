@@ -1,18 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 function Login() {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const [validEmail, setValidEmail] = useState(false);
-  const [validPassword, setValidPassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [disable, setDisable] = useState(true);
 
-  function handleChanges(event, setState, setValid) {
-    const { value } = event.target;
-    setState(value);
-    if (event.target.checkValidity() === true) setValid(true);
-  }
+  useEffect(() => {
+    const regex = /\S+@\S+\.\S+/;
+    const passwordMinLength = 6;
+    if (regex.test(email) && password.length >= passwordMinLength) setDisable(false);
+    else setDisable(true);
+  }, [email, password]);
 
   return (
     <section>
@@ -24,8 +23,8 @@ function Login() {
           id="login-email-input"
           data-testid="login-email-input"
           value={ email }
-          onChange={ (e) => handleChanges(e, setEmail, setValidEmail) }
-          pattern="/\S+@\S+\.\S+/"
+          onChange={ ({ target }) => setEmail(target.value) }
+          pattern="(\w\.?)+@[\w\.-]+\.\w{2}"
         />
       </label>
       <label htmlFor="login-password-input">
@@ -36,7 +35,7 @@ function Login() {
           id="login-password-input"
           data-testid="login-password-input"
           value={ password }
-          onChange={ (e) => handleChanges(e, setPassword, setValidPassword) }
+          onChange={ ({ target }) => setPassword(target.value) }
           pattern=".{6,}"
         />
       </label>
