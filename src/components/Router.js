@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import Login from '../pages/Login';
 
-function Router(props) {
+function Router() {
   return (
     <Switch>
       <Route exact path="/login" component={Login} />
