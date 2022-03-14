@@ -77,7 +77,7 @@ describe('Testando a página de login', () => {
         expect(loginButton).toBeDisabled();
       });
 
-      it('password faltando', async () => {
+      it('senha faltando', async () => {
         const { history, getByTestId } = renderWithRouter(<App />);
         const { pathname } = history.location;
 
