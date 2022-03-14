@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-function Forms({ type, missInfoString, erroString, endpoint, page }) {
+function Forms({ type, missInfoString, erroString, endpoint, page, testids }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
@@ -111,7 +111,7 @@ function Forms({ type, missInfoString, erroString, endpoint, page }) {
         Entrar
       </button>
       { missInfo && <span>{missInfoString}</span> }
-      { registerError && <span>{erroString}</span> }
+      { registerError && <span data-testid={ testids }>{erroString}</span> }
     </section>
   );
 }
@@ -124,4 +124,5 @@ Forms.propTypes = {
   erroString: PropTypes.string,
   endpoint: PropTypes.string,
   page: PropTypes.string,
+  testids: PropTypes.string,
 }.isRequired;
