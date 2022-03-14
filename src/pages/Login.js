@@ -7,8 +7,10 @@ function Login() {
   const [password, setPassword] = useState('');
   const [disable, setDisable] = useState(true);
   const [loginError, setLoginError] = useState(false);
+  const [missInfo, setMissInfo] = useState(false);
 
   const history = useHistory();
+  const enterKey = 13;
 
   useEffect(() => {
     const regex = /\S+@\S+\.\S+/;
@@ -31,14 +33,15 @@ function Login() {
     request();
   }
 
-  // function handleKey(event) {
+  function handleKey() {
+    if (!email || !password) {
+      setMissInfo(true);
+    } else {
+      setMissInfo(false);
+      handleClick();
+    }
+  }
 
-  //   if () {
-  //     console.log('apertou');
-  //   }
-  // }
-
-  const enterKey = 13;
   return (
     <section>
       <label htmlFor="login-email-input">
@@ -51,7 +54,7 @@ function Login() {
           value={ email }
           onChange={ ({ target }) => setEmail(target.value) }
           pattern="(\w\.?)+@[\w\.-]+\.\w{2}"
-          onKeyUp={ (e) => e.keyCode === enterKey && handleClick() }
+          onKeyUp={ (e) => e.keyCode === enterKey && handleKey() }
         />
       </label>
       <label htmlFor="login-password-input">
@@ -63,7 +66,7 @@ function Login() {
           data-testid="login-password-input"
           value={ password }
           onChange={ ({ target }) => setPassword(target.value) }
-          onKeyUp={ (e) => e.keyCode === enterKey && handleClick() }
+          onKeyUp={ (e) => e.keyCode === enterKey && handleKey() }
           pattern=".{6,}"
         />
       </label>
@@ -75,7 +78,8 @@ function Login() {
       >
         Entrar
       </button>
-      { loginError && <span>Email ou senha incorretos</span>}
+      { missInfo && <span>Email e senha não podem ficar vazios</span> }
+      { loginError && <span>Email ou senha incorretos</span> }
       <Link to="/register" data-testid="create-account">
         Ainda não tem uma conta? Registre-se aqui
       </Link>
