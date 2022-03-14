@@ -1,10 +1,14 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [disable, setDisable] = useState(true);
+  const [loginError, setLoginError] = useState(false);
+
+  const history = useHistory();
 
   useEffect(() => {
     const regex = /\S+@\S+\.\S+/;
@@ -12,6 +16,21 @@ function Login() {
     if (regex.test(email) && password.length >= passwordMinLength) setDisable(false);
     else setDisable(true);
   }, [email, password]);
+
+  function handleClick() {
+    const request = async () => {
+      console.log('entrei');
+      try {
+        await axios.post('http://localhost:8080/login', { email, password }).then(({ data }) => localStorage.setItem('tasks-organizer', data.token));
+        history.push('/tasks');
+      } catch (e) {
+        setEmail('');
+        setPassword('');
+        setLoginError(true);
+      }
+    };
+    request();
+  }
 
   return (
     <section>
@@ -43,9 +62,11 @@ function Login() {
         type="button"
         disabled={ disable }
         data-testid="login-button-input"
+        onClick={ handleClick }
       >
         Entrar
       </button>
+      { loginError && <span>Email ou senha incorretos</span>}
       <Link to="/register" data-testid="create-account">
         Ainda não tem uma conta? Registre-se aqui
       </Link>
