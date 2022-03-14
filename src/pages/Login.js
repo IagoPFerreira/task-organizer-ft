@@ -19,7 +19,6 @@ function Login() {
 
   function handleClick() {
     const request = async () => {
-      console.log('entrei');
       try {
         await axios.post('http://localhost:8080/login', { email, password }).then(({ data }) => localStorage.setItem('tasks-organizer', data.token));
         history.push('/tasks');
@@ -32,6 +31,14 @@ function Login() {
     request();
   }
 
+  // function handleKey(event) {
+
+  //   if () {
+  //     console.log('apertou');
+  //   }
+  // }
+
+  const enterKey = 13;
   return (
     <section>
       <label htmlFor="login-email-input">
@@ -44,6 +51,7 @@ function Login() {
           value={ email }
           onChange={ ({ target }) => setEmail(target.value) }
           pattern="(\w\.?)+@[\w\.-]+\.\w{2}"
+          onKeyUp={ (e) => e.keyCode === enterKey && handleClick() }
         />
       </label>
       <label htmlFor="login-password-input">
@@ -55,6 +63,7 @@ function Login() {
           data-testid="login-password-input"
           value={ password }
           onChange={ ({ target }) => setPassword(target.value) }
+          onKeyUp={ (e) => e.keyCode === enterKey && handleClick() }
           pattern=".{6,}"
         />
       </label>
