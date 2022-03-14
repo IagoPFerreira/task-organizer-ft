@@ -28,16 +28,21 @@ function Forms({ type, missInfoString, erroString, endpoint, page, testids }) {
     } else setDisable(true);
   }, [email, password, name]);
 
+  function resetStates() {
+    setEmail('');
+    setPassword('');
+    if (type === 'login') setName(true);
+    else setName('');
+  }
+
   function handleClick() {
     const request = async () => {
       try {
         await axios.post(endpoint, { email, password, name });
+        resetStates();
         history.push(`/${page}`);
       } catch (e) {
-        setEmail('');
-        setPassword('');
-        if (type === 'login') setName(true);
-        else setName('');
+        resetStates();
         setRegisterErro(true);
       }
     };
