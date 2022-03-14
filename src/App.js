@@ -1,10 +1,11 @@
 import React from 'react';
 import './App.css';
+import Router from './components/Router';
 
 function App() {
   return (
     <section className="App">
-      Inicio
+      <Router />
     </section>
   );
 }
