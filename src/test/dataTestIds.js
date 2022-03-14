@@ -3,6 +3,7 @@ const testIds = {
   loginPasswordInput: 'login-password-input',
   loginSubmitButton: 'login-submit-button',
   createAccount: 'create-account',
+  incorretEmailOrPassword: 'incorrect-email-or-password',
 };
 
 export default testIds;
