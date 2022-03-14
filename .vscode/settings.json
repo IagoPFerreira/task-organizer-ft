@@ -2,6 +2,7 @@
   "conventionalCommits.scopes": [
     "tests",
     "Application",
-    "pages"
+    "pages",
+    "components"
   ]
 }
