@@ -1,5 +1,4 @@
 import React from 'react'
-import { screen } from '@testing-library/react'
 import App from '../App';
 import renderWithRouter from './renderWithRouter';
 import userEvent from '@testing-library/user-event';
@@ -22,38 +21,84 @@ describe('Testando a página de login', () => {
     expect(createAccount).toBeInTheDocument();
   });
 
-  it('verificando o comportamento da página de login', async () => {
-    const { history, getByTestId } = renderWithRouter(<App />);
-    const { pathname } = history.location;
+  describe('verificando o comportamento da página de login', () => {
+    it('se o usuário não estiver cadastrado', async () => {
+      const { history, getByTestId, findByTestId } = renderWithRouter(<App />);
+      const { pathname } = history.location;
 
-    const loginEmailInput = getByTestId(testIds.loginEmailInput);
-    const loginPasswordInput = getByTestId(testIds.loginPasswordInput);
-    const loginButton = getByTestId(testIds.loginSubmitButton);
-    const createAccount = getByTestId(testIds.createAccount);  
+      const loginEmailInput = getByTestId(testIds.loginEmailInput);
+      const loginPasswordInput = getByTestId(testIds.loginPasswordInput);
+      const loginButton = getByTestId(testIds.loginSubmitButton);
 
-    expect(pathname).toBe('/login');
+      expect(pathname).toBe('/login');
 
-    expect(loginEmailInput).toHaveValue('');
-    expect(loginPasswordInput).toHaveValue('');
-    expect(loginButton).toBeDisabled();
+      expect(loginEmailInput).toHaveValue('');
+      expect(loginPasswordInput).toHaveValue('');
+      expect(loginButton).toBeDisabled();
 
-    userEvent.type(loginEmailInput, 'yarpenzigrin@anao.com');
-    userEvent.type(loginPasswordInput, '123456789');
+      userEvent.type(loginEmailInput, 'yarpenzigrinsr@anao.com');
+      userEvent.type(loginPasswordInput, '123456789');
 
-    expect(loginEmailInput).toHaveValue('yarpenzigrin@anao.com');
-    expect(loginPasswordInput).toHaveValue('123456789');
-    
-    expect(loginButton).toBeEnabled();
+      expect(loginEmailInput).toHaveValue('yarpenzigrinsr@anao.com');
+      expect(loginPasswordInput).toHaveValue('123456789');
+      
+      expect(loginButton).toBeEnabled();
 
-    userEvent.click(loginButton);
+      userEvent.click(loginButton);
 
-    expect(loginEmailInput).toHaveValue('');
-    expect(loginPasswordInput).toHaveValue('');
-    expect(loginButton).toBeDisabled();
+      const nonExistentUser = await findByTestId(testIds.incorretEmailOrPassword);
 
-    const nonExistentUser = await getByTestId('non-existent-user');
+      expect(nonExistentUser).toBeInTheDocument();
+      expect(loginEmailInput).toHaveValue('');
+      expect(loginPasswordInput).toHaveValue('');
+      expect(loginButton).toBeDisabled();
+    });
 
-    expect(nonExistentUser).toBeInTheDocument();
+    describe('se os dados estiverem faltando', () => {
+      it('e-mail fantando', async () => {
+        const { history, getByTestId } = renderWithRouter(<App />);
+        const { pathname } = history.location;
+
+        const loginEmailInput = getByTestId(testIds.loginEmailInput);
+        const loginPasswordInput = getByTestId(testIds.loginPasswordInput);
+        const loginButton = getByTestId(testIds.loginSubmitButton);
+
+        expect(pathname).toBe('/login');
+        
+        expect(loginEmailInput).toHaveValue('');
+        expect(loginPasswordInput).toHaveValue('');
+        expect(loginButton).toBeDisabled();
+
+        userEvent.type(loginPasswordInput, '123456789');
+
+        expect(loginEmailInput).toHaveValue('');
+        expect(loginPasswordInput).toHaveValue('123456789');
+        
+        expect(loginButton).toBeDisabled();
+      });
+
+      it('password faltando', async () => {
+        const { history, getByTestId } = renderWithRouter(<App />);
+        const { pathname } = history.location;
+
+        const loginEmailInput = getByTestId(testIds.loginEmailInput);
+        const loginPasswordInput = getByTestId(testIds.loginPasswordInput);
+        const loginButton = getByTestId(testIds.loginSubmitButton);
+
+        expect(pathname).toBe('/login');
+
+        expect(loginEmailInput).toHaveValue('');
+        expect(loginPasswordInput).toHaveValue('');
+        expect(loginButton).toBeDisabled();
+
+        userEvent.type(loginEmailInput, 'yarpenzigrinsr@anao.com');
+
+        expect(loginEmailInput).toHaveValue('yarpenzigrinsr@anao.com');
+        expect(loginPasswordInput).toHaveValue('');
+        
+        expect(loginButton).toBeDisabled();
+      });
+    });
   });
 
   it('verificando se a aplicação é redirecionada para a página de registro ao clicar no botão de criar um novo usuário', async () => {
